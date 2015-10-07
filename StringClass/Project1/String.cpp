@@ -55,11 +55,11 @@ sfw::string::string(const char * a)
 
 sfw::string::string(const string & a)
 {
-	m_size = a;
+	m_size = a.m_size;
 	m_data = new char[m_size];
 	m_data[0] = '\0';
-	strcpy_s(m_data, m_size, a);
-return *this
+	strcpy_s(m_data, m_size, a.m_data);
+
 }
 
 sfw::string::string(string && a)
@@ -106,13 +106,13 @@ sfw::string & sfw::string::operator+=(char a)
 char & sfw::string::operator[](size_t index)
 {
 	// TODO: Is this finished?
-	return this->m_data[0];
+	return this->m_data[index];
 }
 
 const char & sfw::string::operator[](size_t index) const
 {
 	// TODO: Is this finished?
-	return this->m_data[0];
+	return this->m_data[index];
 }
 
 
@@ -121,35 +121,47 @@ const char & sfw::string::operator[](size_t index) const
 size_t sfw::string::size() const
 {
 	// TODO:
+	
 	return size_t(m_size - 1);
 }
 
 void sfw::string::resize(size_t size)
 {
 	// TODO:
+	char* t = new char[size];
+	m_size = size;
+	if (m_data != nullptr) {
+		strncpy_s(t, size, m_data, m_size);
+		delete[]m_data;
+	}
+	m_data = t;
+	m_data[m_size - 1] = '\0';
+
 }
 
 void sfw::string::clear()
 {
+	m_data[0] = '\0';
 	// TODO:
 }
 
 bool sfw::string::empty() const
 {
 	// TODO:
-	return false;
+	return m_data[0] =='\0';
 }
 
 const char * sfw::string::cstring() const
 {
 	// TODO:
-	return nullptr;
+	return m_data;
 }
 
 bool sfw::operator<(const string & a, const string & b)
 {
 	// TODO:
-	return false;
+	if(strcmp(a<b) = )
+	return true;
 }
 
 bool sfw::operator<(const string & a, const char * b)
