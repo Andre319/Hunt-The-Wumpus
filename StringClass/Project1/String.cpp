@@ -2,24 +2,26 @@
 #include <iostream>
 #include <cstring>
 #include <cassert>
+#include <climits>
+
 
 // A few freebies to get past the first couple of tests.
 // These may need to be modified!
 sfw::string::string(void)
 {
-	// TODO: is this finished?
+	
 	m_data = new char[m_size = 1]{ '\0' };
 }
 
 sfw::string::~string()
 {
-	// TODO: is this finished?
+	
 	delete[]m_data;
 }
 
 size_t sfw::string::length() const
 {
-	// TODO: is this finished?
+	
 	return strlen(m_data);
 }
 
@@ -29,7 +31,7 @@ size_t sfw::string::length() const
 
 sfw::string::string(size_t size)
 {
-	m_data = new char[m_size = size + 1];	// allocate memory for the dyn. array
+	m_data = new char[m_size = size];	// allocate memory for the dyn. array
 	m_data[m_size - 1] = '\0';			// set the last available character to null-term
 }
 
@@ -43,43 +45,64 @@ sfw::string::string(const char * a, size_t size)
 
 sfw::string::string(const char * a)
 {
-	if (a != nullptr) {
-	m_size = strlen(a) + 1;
-	m_data = new char[m_size];
-	m_data[0] = '\0';
-	strcpy_s(m_data, m_size, a);
+	if (a != nullptr)
+	{
+		m_size = strlen(a) + 1;
+		m_data = new char[m_size];
+		m_data[0] = '\0';
+		strcpy_s(m_data, m_size, a);
 	}
 
+	else
+	{
+		m_data = new char[m_size = 1]{ '\0' };
+	}
 
 }
 
 sfw::string::string(const string & a)
 {
+	if (a.m_size > 0)
+	{
+		m_size = a.m_size;
+		m_data = new char[m_size];
+		m_data[0] = '\0';
+		strcpy_s(m_data, m_size, a.m_data);
+	}
+	else m_data = new char[m_size = 1]{ '\0' }; // ""
+
+}
+
+sfw::string::string(string &&a) // move constructor
+{
+	m_data = a.m_data;
 	m_size = a.m_size;
-	m_data = new char[m_size];
-	m_data[0] = '\0';
-	strcpy_s(m_data, m_size, a.m_data);
 
+
+	a.m_data = new char[a.m_size = 1]{ '\0' };
 }
 
-sfw::string::string(string && a)
+sfw::string & sfw::string::operator=(const string & a) // copy assignment
 {
-	// TODO:
-}
-
-sfw::string & sfw::string::operator=(const string & a)
-{
-	// TODO:
+	resize(a.m_size);
+	strncpy_s(m_data, a.m_size, a.m_data, _TRUNCATE);
 	return *this;
 }
 
-sfw::string & sfw::string::operator=(string && a)
+sfw::string & sfw::string::operator=(string && a) // move assignment
 {
-	// TODO:
+	// swap
+	char *t = m_data;
+	m_data = a.m_data;
+	a.m_data = t;
+	
+	m_size = a.m_size;
+
+	a.m_data[0] = '\0';
 	return *this;
 }
 
-sfw::string & sfw::string::operator=(const char * a)
+sfw::string & sfw::string::operator=(const char * a) // assignment operator (nothing special)
 {
 	// TODO:
 	return *this;
@@ -122,7 +145,7 @@ size_t sfw::string::size() const
 {
 	// TODO:
 	
-	return size_t(m_size - 1);
+	return size_t(m_size);
 }
 
 void sfw::string::resize(size_t size)
@@ -130,8 +153,12 @@ void sfw::string::resize(size_t size)
 	// TODO:
 	char* t = new char[size];
 	m_size = size;
+
+	if (m_size <= 0) m_size = 1;
+	if (m_size > UINT16_MAX) m_size = UINT16_MAX;
+
 	if (m_data != nullptr) {
-		strncpy_s(t, size, m_data, m_size);
+		strncpy_s(t, size, m_data, _TRUNCATE);
 		delete[]m_data;
 	}
 	m_data = t;
@@ -153,117 +180,112 @@ bool sfw::string::empty() const
 
 const char * sfw::string::cstring() const
 {
-	// TODO:
+	
 	return m_data;
 }
 
 bool sfw::operator<(const string & a, const string & b)
 {
-	// TODO:
-	if(strcmp(a<b) = )
-	return true;
+	
+	return strcmp(a.cstring(), b.cstring()) < 0;
 }
 
 bool sfw::operator<(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(), b) < 0;
 }
 
 bool sfw::operator<(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a, b.cstring()) < 0;
 }
 
 bool sfw::operator<=(const string & a, const string & b)
 {
-	// TODO:
-	return false;
+	return a < b || a == b;
 }
 
 bool sfw::operator<=(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(), b) < 0;
 }
 
 bool sfw::operator<=(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a, b.cstring()) < 0;
 }
 
 bool sfw::operator>(const string & a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(),b.cstring()) > 0;
 }
 
 bool sfw::operator>(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(), b) > 0;
 }
 
 bool sfw::operator>(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a, b.cstring()) > 0;
 }
 
 bool sfw::operator>=(const string & a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return (a > b || a == b);
 }
 
 bool sfw::operator>=(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(), b ) >= 0;
 }
 
 bool sfw::operator>=(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a, b.cstring()) >= 0;
 }
 
 bool sfw::operator!=(const string & a, const string & b)
 {
-	// TODO:
-	return false;
+	return !(a == b);
 }
 
 bool sfw::operator!=(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	return !(a == b);
 }
 
 bool sfw::operator!=(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	return !(a == b);
 }
 
 bool sfw::operator==(const string & a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(),b.cstring()) == 0;
 }
 
 bool sfw::operator==(const string & a, const char * b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a.cstring(), b) == 0;
 }
 
 bool sfw::operator==(const char * a, const string & b)
 {
-	// TODO:
-	return false;
+	
+	return strcmp(a,b.cstring()) == 0;
 }
 
 sfw::string sfw::operator+(const string & a, const string & b)
@@ -311,5 +333,5 @@ std::istream & sfw::operator>>(std::istream & is, string & p)
 const sfw::string sfw::literals::operator""_sfw(const char * a, size_t len)
 {
 	// TODO:
-	return string();
+	return string(a,len+1);
 }
