@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Hunt_The_Wumpus.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="String.cpp" />
   </ItemGroup>

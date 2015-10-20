@@ -104,25 +104,29 @@ sfw::string & sfw::string::operator=(string && a) // move assignment
 
 sfw::string & sfw::string::operator=(const char * a) // assignment operator (nothing special)
 {
-	// TODO:
+	
+	
+	m_data[0];
 	return *this;
 }
 
 sfw::string & sfw::string::operator+=(const string & a)
 {
-	// TODO:
+	
+	a.m_size;
 	return *this;
 }
 
 sfw::string & sfw::string::operator+=(const char * a)
 {
-	// TODO:
+	
+	m_data;
 	return *this;
 }
 
 sfw::string & sfw::string::operator+=(char a)
 {
-	// TODO:
+	m_size;
 	return *this;
 }
 
@@ -169,12 +173,12 @@ void sfw::string::resize(size_t size)
 void sfw::string::clear()
 {
 	m_data[0] = '\0';
-	// TODO:
+	
 }
 
 bool sfw::string::empty() const
 {
-	// TODO:
+	
 	return m_data[0] =='\0';
 }
 
@@ -291,19 +295,19 @@ bool sfw::operator==(const char * a, const string & b)
 sfw::string sfw::operator+(const string & a, const string & b)
 {
 	// TODO:
-	return string();
+	return string(a) +b;
 }
 
 sfw::string sfw::operator+(const string & a, const char * b)
 {
 	// TODO:
-	return string();
+	return string(a) +b;
 }
 
 sfw::string sfw::operator+(const char * a, const string & b)
 {
 	// TODO:
-	return string();
+	return string(a) +b;
 }
 
 sfw::string sfw::operator+(const string & a, char b)
